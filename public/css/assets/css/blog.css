@@ -1,0 +1,32 @@
+.add-btn {
+    border-radius: 10px;
+    color: #fff;
+    font-size: 20px;
+}
+
+/* Table Heading Fix */
+.table thead th {
+    font-size: 1rem !important;
+    /* or any size like 14px */
+    font-weight: 500;
+}
+
+.blog-edit-btn {
+    background-color: #eaf4ff;
+    color: #0b5394;
+    border: 1px solid #0b5394;
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+}
+
+.blog-delete-btn{
+     background-color: #fdecea;   
+        color: #b02a37;             
+        border: 1px solid #b02a37;
+        border-radius:8px;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+}
+

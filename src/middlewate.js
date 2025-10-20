@@ -7,9 +7,6 @@ export async function middleware(request) {
     secret: process.env.AUTH_SECRET,
   });
 
-
-      
-
   const pathname = request.nextUrl.pathname;
 
   // Public paths

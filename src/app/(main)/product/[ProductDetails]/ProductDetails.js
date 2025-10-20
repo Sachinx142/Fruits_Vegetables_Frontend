@@ -15,7 +15,7 @@ function Page() {
   const pathname = usePathname();
   const productSlug = pathname.split("/")[2];
 
-  const getProductData = useCallback(async () => {
+  const getProductData = async () => {
     try {
       const res = await api.post("/product/getProductBySlug", { productSlug });
       if (res.data.status === 1) {
@@ -24,7 +24,7 @@ function Page() {
     } catch (err) {
       console.error(err);
     }
-  }, [productSlug]);
+  };
 
   const handleAddToCart = async () => {
     const token = localStorage.getItem("token"); 
@@ -92,12 +92,10 @@ function Page() {
           {/* Product Image */}
           <div className="col-lg-5">
             <div className="card shadow-sm p-3 mt-2">
-              <Image
+              <img
                 src={productData?.productImage}
                 alt={productData.productName}
                 className="img-fluid rounded"
-                width={500}
-                height={400}
               />
             </div>
           </div>

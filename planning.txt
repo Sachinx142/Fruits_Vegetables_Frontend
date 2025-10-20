@@ -2,3 +2,14 @@ Category: Fruits
   Subcategory: Citrus
     Product: Orange → stock: 50, price: $1.5
     Product: Lemon  → stock: 30, price: $1.2
+
+User
+Order Page - Pending
+Thanku Page - Pending
+UI Fix - Pending
+Blog Details Page - Pendings
+Dynamic Content Page - Pending
+
+Admin
+Role-Based -> Pending
+UI -> Improvement

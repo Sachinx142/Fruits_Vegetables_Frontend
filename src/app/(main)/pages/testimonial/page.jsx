@@ -90,7 +90,16 @@ const Page = () => {
                 </div>
               ))
             ) : (
-              <p className="text-center">No testimonials found.</p>
+              <div className="text-center">
+              <img
+                src="/img/no-data.png"
+                alt="no-data-image"
+                className="img-fluid"
+                width={600}
+                height={400}
+                style={{ maxWidth: "600px" }}
+              />
+            </div>
             )}
           </div>
         </div>

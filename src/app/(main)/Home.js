@@ -27,10 +27,12 @@ export default function Home() {
   const [wishlist, setWishlist] = useState([]);
 
   const toggleWishlist = async (productId) => {
-    if (!id) {
-      toast.success("Please login first!");
-      return;
-    }
+     const token = localStorage.getItem("token");
+
+  if (!id || !token) {
+    toast.error("Please login first!");
+    return;
+  }
 
     const isWishlisted = wishlist.includes(productId);
 
@@ -61,12 +63,12 @@ export default function Home() {
   };
 
   const getUserWishlist = useCallback(async () => {
-    if (!id) return;
+     const token = localStorage.getItem("token");
+       if (!id || !token) {
+    setWishlist([]); 
+    return;
+  }
     try {
-      const token = localStorage.getItem("token");
-
-      if (!token) return;
-
       const res = await api.post(
         "/wishlist/getAllWishlists",
         { user: id },
@@ -83,6 +85,7 @@ export default function Home() {
       }
     } catch (error) {
       console.error("Wishlist fetch error:", error);
+      setWishlist([]); 
     }
   }, [id]);
 
@@ -126,9 +129,7 @@ export default function Home() {
   }, [role, router]);
 
   useEffect(() => {
-    if (id) {
       getUserWishlist();
-    }
   }, [id, getUserWishlist]);
 
   useEffect(() => {
@@ -526,20 +527,7 @@ export default function Home() {
                       style={{ maxWidth: "600px" }}
                     />
                   </div>
-                )}
-
-                {/* Browse More Button */}
-                <div
-                  className="col-12 text-center wow fadeInUp"
-                  data-wow-delay="0.1s"
-                >
-                  <Link
-                    className="btn btn-primary rounded-pill py-3 px-5"
-                    href=""
-                  >
-                    Browse More Products
-                  </Link>
-                </div>
+                )}            
               </div>
             </div>
           </div>
@@ -631,7 +619,16 @@ export default function Home() {
               ))}
             </Swiper>
           ) : (
-            <p className="text-center">No testimonials found.</p>
+            <div className="text-center">
+            <img
+              src="/img/no-data.png"
+              alt="no-data-image"
+              className="img-fluid"
+              width={600}
+              height={400}
+              style={{ maxWidth: "600px" }}
+            />
+          </div>
           )}
         </div>
       </div>

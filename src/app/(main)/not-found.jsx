@@ -6,7 +6,6 @@ const NotFound = () => {
   return (
     <>
     <Navbar/>
-           {/* <!-- Page Header Start --> */}
     <div className="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
         <div className="container">
             <h1 className="display-3 mb-3 animated slideInDown">404 Error</h1>
@@ -19,8 +18,6 @@ const NotFound = () => {
             </nav>
         </div>
     </div>
-
-    {/* <!-- 404 Start --> */}
     <div className="container-xxl py-6 wow fadeInUp" data-wow-delay="0.1s">
         <div className="container text-center">
             <div className="row justify-content-center">
@@ -34,8 +31,6 @@ const NotFound = () => {
             </div>
         </div>
     </div>
-    {/* <!-- 404 End -->  */}
-
     <Footer/>
     </>
   )

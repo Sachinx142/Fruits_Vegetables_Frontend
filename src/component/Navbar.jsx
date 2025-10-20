@@ -1,10 +1,11 @@
 'use client'
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link'
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react'
 
 const Navbar = () => {
+    const router = useRouter();
     const pathname = usePathname()
     const session = useSession();
     const role = session?.data?.user?.role
@@ -12,7 +13,9 @@ const Navbar = () => {
     const userName = session?.data?.user?.name
 
     const handleLogout = async () => {
-        await signOut({ callbackUrl: '/' });
+        localStorage.removeItem('token');
+        await signOut({ redirect:false });
+        router.push('/');
     };
 
     return (
@@ -72,9 +75,9 @@ const Navbar = () => {
                                         <Link href="/profile" className="dropdown-item">
                                             <i className="fa fa-user me-2 text-secondary"></i> My Profile
                                         </Link>
-                                        <Link href="/orders" className="dropdown-item">
+                                        {/* <Link href="/orders" className="dropdown-item">
                                             <i className="fa fa-box me-2 text-primary"></i> Orders
-                                        </Link>
+                                        </Link> */}
                                         <Link href="/wishlist" className="dropdown-item">
                                             <i className="fa fa-heart me-2 text-danger"></i> Wishlist
                                         </Link>

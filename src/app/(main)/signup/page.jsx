@@ -49,7 +49,7 @@ export default function RegisterPage() {
         localStorage.setItem("token", res.data.data.token);
         toast.success(res.data.message);
         await signIn("credentials", { id: res.data.data.id, role: res.data.data.role, loginType: 0, redirect: false });
-        router.replace("/");
+        router.replace("/login");
       } else {
         toast.error(res.data.message);
       }
@@ -60,7 +60,7 @@ export default function RegisterPage() {
   };
 
   useEffect(() => {
-    if (role === "user") {
+    if (role === "User") {
       router.replace("/login");
     }
   }, [role]);
@@ -78,11 +78,11 @@ export default function RegisterPage() {
                 <label className="form-label">Full Name</label>
                 <input
                   type="text"
-                  className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                  className={`form-control ${errors.fullName ? 'is-invalid' : ''}`}
                   placeholder="Full Name"
-                  {...register("name", { required: "Name is required" })}
+                  {...register("fullName", { required: "Name is required" })}
                 />
-                {errors.name && <div className="invalid-feedback">{errors.name.message}</div>}
+                {errors.fullName && <div className="invalid-feedback">{errors.fullName.message}</div>}
               </div>
 
               <div className="mb-3">
@@ -126,7 +126,7 @@ export default function RegisterPage() {
               <h5 className="text-center mb-3">OTP Verification</h5>
               <p className="text-center text-muted">Enter the 4-digit code sent to your mobile number</p>
 
-              <div className="d-flex justify-content-center mb-3">
+
                 <div className="email-otp">
                   <h5>Email OTP</h5>
                   <OtpInput
@@ -144,10 +144,9 @@ export default function RegisterPage() {
                         border: "1px solid #ccc",
                       }} />}
                   />
-                </div>
-
-
-                <div className="phone-otp">
+  
+              </div>
+              <div className="phone-otp">
                   <h5>Phone OTP</h5>
                   <OtpInput
                     value={phoneOtp}
@@ -165,8 +164,6 @@ export default function RegisterPage() {
                       }} />}
                   />
                 </div>
-
-              </div>
               <button type="submit" onClick={(e) => onVerifyOTP(e)} className="btn btn-success w-100">Verify OTP</button>
 
               <p className="text-center mt-2 text-muted">

@@ -9,5 +9,4 @@ const api = axios.create({
   //     'Authorization': 'Bearer YOUR_TOKEN',
   //   },
 });
-
 export default api;

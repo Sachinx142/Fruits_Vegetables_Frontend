@@ -20,7 +20,7 @@ const Navbar = () => {
 
     return (
         <>
-            {/* <!-- Navbar Start --> */}
+     
             <div className="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
                 <div className="top-bar row gx-0 align-items-center d-none d-lg-flex">
                     <div className="col-lg-6 px-5 text-start">

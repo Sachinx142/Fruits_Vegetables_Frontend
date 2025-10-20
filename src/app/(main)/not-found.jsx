@@ -2,7 +2,6 @@ import Footer from '@/component/Footer'
 import Navbar from '@/component/Navbar'
 import Link from 'next/link'
 import React from 'react'
-
 const NotFound = () => {
   return (
     <>

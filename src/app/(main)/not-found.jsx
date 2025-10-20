@@ -20,8 +20,6 @@ const NotFound = () => {
             </nav>
         </div>
     </div>
-    {/* <!-- Page Header End --> */}
-
 
     {/* <!-- 404 Start --> */}
     <div className="container-xxl py-6 wow fadeInUp" data-wow-delay="0.1s">

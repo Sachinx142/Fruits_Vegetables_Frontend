@@ -14,6 +14,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
+
+
 export default function Home() {
   const router = useRouter();
   const session = useSession();

@@ -4,7 +4,30 @@ Category: Fruits
     Product: Lemon  → stock: 30, price: $1.2
 
 User
-Order Page - Pending
+Order Page - Pending  
+
+Order Management :- 
+   1.Random Order Id Generate for Every User
+   2.Date Order
+   3.One Order and Multiple Order Calculate in admin -> show 
+   4.Status :- Order Status with admin action -> Processing,Shipped,Delieverd,Cancelled -> admin action to update shipped,cancelled etc 
+   
+Random Id Generate 
+   | Field         | Value                                         | Explanation                       |
+| ------------- | --------------------------------------------- | --------------------------------- |
+| `userName`    | "Sagar"                                       | First 2 letters → `SA`            |
+| `email`       | "[sameer@gmail.com](mailto:sameer@gmail.com)" | First 2 letters before `@` → `SA` |
+| `phone`       | "12342003"                                    | Last 4 digits → `2003`            |
+| `fullAddress` | "Lucknow"                                     | First 2 letters → `LU`            |
+| Year          | 2025                                          | Current year                      |
+
+
+cart :- The cart holds products either from the API (for logged-in users) or localStorage (for guests) and calculates subtotal, tax, shipping, and total. During checkout, the cart items, user info, and payment mode are sent to the backend to create an ord
+
+
+Problem :- Same Product Order are saveing on cart time and checkout time 
+
+
 Thanku Page - Pending
 UI Fix - Pending
 Blog Details Page - Pendings

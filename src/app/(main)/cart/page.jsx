@@ -59,6 +59,10 @@ const CartPage = () => {
   const updateQuantity = async (productId, newQty) => {
     if (newQty < 1) return;
     const token = localStorage.getItem("token");
+    if (!token) {
+         router.push("/login");
+      return;
+    }
     try {
       const res = await api.post(
         "/cart/updateCart",
@@ -76,6 +80,11 @@ const CartPage = () => {
 
   const removeItem = async (productId) => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+    
     try {
       const res = await api.post(
         "/cart/deleteCart",
@@ -149,13 +158,13 @@ const CartPage = () => {
                     <div key={item._id} className="row cart-item mb-3 align-items-center">
                       <div className="col-md-3">
                         <img
-                          src={item.product.productImage}
-                          alt={item.product.productName}
+                          src={item.product?.productImage}
+                          alt={item.product?.productName}
                           className="img-fluid rounded"
                         />
                       </div>
                       <div className="col-md-3">
-                        <h5>{item.product.productName}</h5>
+                        <h5>{item.product?.productName}</h5>
                         <p className="text-muted">Category: {item?.product?.categoryId?.categoryName || "N/A"}</p>
                       </div>
                       <div className="col-md-2">
@@ -179,7 +188,7 @@ const CartPage = () => {
                           <button
                             className="btn btn-outline-secondary btn-sm"
                             onClick={() =>
-                              updateQuantity(item.product._id, item.qty + 1)
+                              updateQuantity(item?.product._id, item?.qty + 1)
                             }
                           >
                             +
@@ -187,7 +196,7 @@ const CartPage = () => {
                         </div>
                       </div>
                       <div className="col-md-2 text-end">
-                        <p className="fw-bold">₹{item.total.toFixed(2)}</p>
+                        <p className="fw-bold">₹{item.total?.toFixed(2)}</p>
                       </div>
                       <div className="col-md-2 text-end">
                         <button
@@ -213,20 +222,20 @@ const CartPage = () => {
                   <h5 className="card-title mb-4">Order Summary</h5>
                   <div className="d-flex justify-content-between mb-3">
                     <span>Subtotal</span>
-                    <span>₹{subtotal.toFixed(2)}</span>
+                    <span>₹{subtotal?.toFixed(2)}</span>
                   </div>
                   <div className="d-flex justify-content-between mb-3">
                     <span>Shipping</span>
-                    <span>₹{shipping.toFixed(2)}</span>
+                    <span>₹{shipping?.toFixed(2)}</span>
                   </div>
                   <div className="d-flex justify-content-between mb-3">
                     <span>Tax</span>
-                    <span>₹{tax.toFixed(2)}</span>
+                    <span>₹{tax?.toFixed(2)}</span>
                   </div>
                   <hr />
                   <div className="d-flex justify-content-between mb-4">
                     <strong>Total</strong>
-                    <strong>₹{total.toFixed(2)}</strong>
+                    <strong>₹{total?.toFixed(2)}</strong>
                   </div>
 
                   <button className="btn btn-primary w-100" onClick={() => router.push("/checkout")} >Proceed to Checkout</button>

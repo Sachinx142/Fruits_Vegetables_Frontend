@@ -75,9 +75,9 @@ const Navbar = () => {
                                         <Link href="/profile" className="dropdown-item">
                                             <i className="fa fa-user me-2 text-secondary"></i> My Profile
                                         </Link>
-                                        {/* <Link href="/orders" className="dropdown-item">
+                                        <Link href="/orders" className="dropdown-item">
                                             <i className="fa fa-box me-2 text-primary"></i> Orders
-                                        </Link> */}
+                                        </Link>
                                         <Link href="/wishlist" className="dropdown-item">
                                             <i className="fa fa-heart me-2 text-danger"></i> Wishlist
                                         </Link>

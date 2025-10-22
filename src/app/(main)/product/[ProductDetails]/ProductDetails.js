@@ -27,43 +27,60 @@ function Page() {
   };
 
   const handleAddToCart = async () => {
-    const token = localStorage.getItem("token"); 
-    if (!token) {
-      toast.error("You must be logged in to add items to cart");
-      return;
+  const token = localStorage.getItem("token"); 
+
+  if (!productData) return;
+
+  if (!quantity || quantity <= 0) {
+    toast.error("Please enter a valid quantity");
+    return;
+  }
+
+  if (!token) {
+    // Guest user: save to localStorage
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existing = cart.find(item => item.productId === productData._id);
+
+    if (existing) {
+      existing.qty += quantity;
+    } else {
+      cart.push({
+        productId: productData._id,
+        productName: productData.productName,
+        productImage: productData.productImage,
+        price: productData.finalPrice,
+        qty: quantity,
+      });
     }
 
-    if (!productData) return;
+    localStorage.setItem("cart", JSON.stringify(cart));
+    toast.success("Added to cart (local storage)!");
+    return;
+  }
 
-    if (!quantity || quantity <= 0) {
-      toast.error("Please enter a valid quantity");
-      return;
-    }
-
-    try {
-      const res = await api.post(
-        "/cart/addCart",
-        {
-          productId: productData._id,
-          qty: quantity,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (res.data.status === 1) {
-        toast.success(res.data.message);
-      } else {
-        toast.error(res.data.message || "Failed to add to cart");
+  try {
+    const res = await api.post(
+      "/cart/addCart",
+      {
+        productId: productData._id,
+        qty: quantity,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
       }
-    } catch (err) {
-      console.error(err);
-      toast.error(err.response?.data?.message || "Server error");
+    );
+
+    if (res.data.status === 1) {
+      toast.success(res.data.message);
+    } else {
+      toast.error(res.data.message || "Failed to add to cart");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    toast.error(err.response?.data?.message || "Server error");
+  }
+};
+
 
   useEffect(() => {
     if (productSlug){

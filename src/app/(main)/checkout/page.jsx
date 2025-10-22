@@ -1,20 +1,51 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "@/component/Navbar";
 import Footer from "@/component/Footer";
 import toast from 'react-hot-toast';
 import { useForm } from "react-hook-form";
 import api from "@/_utils/api";
+import { useSession } from "next-auth/react";
 
 const CheckoutPage = () => {
+const session = useSession();
+const id = session?.data?.user?.id;
 const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 const [paymentMode,setPaymentMode] = useState("razorpay")
+const [cartItems, setCartItems] = useState([]);
+const [loading, setLoading] = useState(true);
+
+  const fetchCart = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return setCartItems(JSON.parse(localStorage.getItem("cart")) || []);
+    }
+    try {
+      const res = await api.get("/cart/getCart", { headers: { Authorization: `Bearer ${token}` } });
+      if (res.data.status === 1){
+          setCartItems(res.data.data);
+      }
+      else {
+        setCartItems([]);
+      }
+    } catch (err) {
+      console.error(err);
+      setCartItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   // Order summary (replace with dynamic cart values if needed)
-  const subtotal = 199.97;
-  const shipping = 10.0;
-  const tax = 20.0;
+   const subtotal = cartItems.reduce((acc, item) => {
+    const price = item.product?.finalPrice || item.price || 0;
+    const qty = item.qty || 0;
+    return acc + price * qty;
+  }, 0);
+  const shipping = cartItems.length > 0 ? 50 : 0;
+  const tax = subtotal * 0.18;
   const total = subtotal + shipping + tax;
 
   // Generate random order ID
@@ -25,19 +56,26 @@ const [paymentMode,setPaymentMode] = useState("razorpay")
   data.paymentMode = paymentMode;
   data.totalAmount = total;
   data.orderId = orderId;
+  data.userId = id || null;
+  data.products = cartItems.map(item => ({
+    productId:item.product._id,
+    productName:item.product.productName,
+    quantity:item.qty,
+    price:item.product.finalPrice
+  }))
+  
 
   try {
     if (paymentMode === "cod") {
       // COD: Save order directly
-      const res = await api.post("/payment/saveOrder", data);
+      const res = await api.post("/order/saveOrder", data);
       if (res.data.status === 1) {
         toast.success(res.data.message);
       } else {
         toast.error(res.data.message);
       }
     } else if (paymentMode === "razorpay") {
-      // Razorpay: Create order on backend
-      const res = await api.post("/payment/createRazorpayOrder", { amount: total });
+      const res = await api.post("/order/createRazorpayOrder", { amount: total });
       const razorpayOrder = res.data;
 
       // Open Razorpay checkout
@@ -50,7 +88,7 @@ const [paymentMode,setPaymentMode] = useState("razorpay")
         order_id: razorpayOrder.id,
         handler: async function (response) {
           // Save order in backend after successful payment
-          const saveRes = await api.post("/payment/saveOrder", {
+          const saveRes = await api.post("/order/saveOrder", {
             ...data,
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_order_id: response.razorpay_order_id,
@@ -79,6 +117,21 @@ const [paymentMode,setPaymentMode] = useState("razorpay")
     toast.error("Something went wrong. Please try again!");
   }
 };
+
+useEffect(()=>{
+   fetchCart();
+},[])
+
+
+  if (loading) return (
+    <>
+      <Navbar />
+      <div className="d-flex justify-content-center align-items-center" style={{ height: "70vh" }}>
+        <h4>Loading...</h4>
+      </div>
+      <Footer />
+    </>
+  );
 
 
   return (

@@ -59,11 +59,11 @@ export default function RegisterPage() {
     }
   };
 
-  useEffect(() => {
-    if (role === "User") {
-      router.replace("/login");
+  useEffect(()=>{
+    if(role){
+      router.replace('/login');
     }
-  }, [role]);
+  })
 
   return (
     <>

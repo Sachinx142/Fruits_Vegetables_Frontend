@@ -10,7 +10,6 @@ const page = () => {
   const session = useSession();
   const id = session?.data?.user?.id;
   const [ordersDetails, setOrdersDetails] = useState([]);
-
   const getallOrders = async () => {
      try {
        const res = await api.post('/order/getOrdersByUserId',{

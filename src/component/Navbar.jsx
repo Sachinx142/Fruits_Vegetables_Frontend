@@ -5,9 +5,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import React from 'react'
 
 const Navbar = () => {
+    const session = useSession();
     const router = useRouter();
     const pathname = usePathname()
-    const session = useSession();
     const role = session?.data?.user?.role
     const loginType = session?.data?.user?.loginType;
     const userName = session?.data?.user?.name

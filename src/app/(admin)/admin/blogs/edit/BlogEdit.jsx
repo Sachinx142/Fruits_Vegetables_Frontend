@@ -58,9 +58,7 @@ const BlogEdit = () => {
       formdata.append("keywords", data.keywords);
       formdata.append("metaDescription", data.metaDescription);
       formdata.append("id", id);
-
-   
-
+      
       const res = await api.post("/blogs/updateBlog", formdata);
       if (res.data.status == 1) {
         toast.success(res.data.message);

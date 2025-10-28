@@ -28,6 +28,8 @@ cart :- The cart holds products either from the API (for logged-in users) or loc
 
 Problem :- Same Product Order are saveing on cart time and checkout time 
 
+qty -> Data Save Problem
+
 
 Thanku Page - Pending
 UI Fix - Pending

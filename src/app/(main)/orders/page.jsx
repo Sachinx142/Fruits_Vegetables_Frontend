@@ -3,32 +3,75 @@ import DateFormatter from '@/_helper/frontend/DataFormatter'
 import api from '@/_utils/api'
 import Footer from '@/component/Footer'
 import Navbar from '@/component/Navbar'
+import { debounce} from 'lodash'
 import { useSession } from 'next-auth/react'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 const page = () => {
   const session = useSession();
   const id = session?.data?.user?.id;
   const [ordersDetails, setOrdersDetails] = useState([]);
-  const getallOrders = async () => {
-     try {
-       const res = await api.post('/order/getOrdersByUserId',{
-          userId: id
-       })
-        if(res.data.status === 1){
-          setOrdersDetails(res.data.data);
-        }
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [orderStatus, setOrderStatus] = useState('')
 
-     } catch (error) {
-       console.log(error)
-     }
+
+  const getallOrders = async () => {
+    try {
+      const res = await api.post('/order/getOrdersByUserId', {
+        userId: id
+      })
+      if (res.data.status === 1) {
+        setOrdersDetails(res.data.data);
+        setFilteredOrders(res.data.data);
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  useEffect(()=>{
-    if(id){
-        getallOrders();
+  useEffect(() => {
+    if (id) {
+      getallOrders();
     }
-  },[id])
+  }, [id])
+
+  // Debounce search functionality
+  const handleSearch = useCallback(debounce((term, orders, statusFilter) => {
+    let filtered = orders;
+    if (term.trim()) {
+      const lowerTerm = term.toLowerCase();
+      filtered = filtered.filter(
+        (order) =>
+          order.orderId?.toString().toLowerCase().includes(lowerTerm) ||
+          order.products.some(
+            (p) =>
+              p.productId?.productName
+                ?.toString()
+                .toLowerCase()
+                .includes(lowerTerm) ||
+              p.quantity?.toString().toLowerCase().includes(lowerTerm) ||
+
+              (order.orderDate ? DateFormatter(order.orderDate).toLowerCase().includes(lowerTerm) : false)
+          )
+      );
+    }
+
+    // Search to Dropdown for status 
+    if (statusFilter) {
+      filtered = filtered.filter((order) =>
+        order?.orderStatus?.toLowerCase() === statusFilter.toLowerCase()
+      )
+    };
+    setFilteredOrders(filtered);
+  }, 500),
+    []
+  );
+
+  useEffect(() => {
+    handleSearch(searchTerm, ordersDetails, orderStatus);
+  }, [searchTerm, orderStatus, ordersDetails])
 
 
   return (
@@ -41,14 +84,18 @@ const page = () => {
           </div>
 
           <div className="card-body bg-light">
-
-
             <div className="row g-3 mb-4">
               <div className="col-md-6">
-                <input type="text" className="form-control form-control-lg" placeholder="🔍 Search Order ID or Product Name" />
+                <input type="text" className="form-control form-control-lg" placeholder="🔍 Search Order ID or Product Name"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
               <div className="col-md-4">
-                <select className="form-select form-select-lg">
+                <select className="form-select form-select-lg"
+                  value={orderStatus}
+                  onChange={(e) => setOrderStatus(e.target.value)}
+                >
                   <option value="">Filter by Status</option>
                   <option>Pending</option>
                   <option>Processing</option>
@@ -57,54 +104,70 @@ const page = () => {
                   <option>Cancelled</option>
                 </select>
               </div>
-              <div className="col-md-2 d-grid">
-                <button className="btn btn-primary btn-lg">Search</button>
-              </div>
             </div>
 
-            <div className="table-responsive">
-              <table className="table table-hover table-bordered align-middle text-center">
-                <thead>
-                  <tr>
-                    <th>Order ID</th>
-                    <th>Product Image</th>
-                    <th>Product Qunatity</th>
-                    <th>Amount</th>
-                    <th>Payment Status</th>
-                    <th>Order Status</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white">
-                  {ordersDetails.length === 0 ? (
-                    <tr>
-                      <td colSpan="7">No orders found.</td>
-                      </tr>
-                      ) : (
-                          ordersDetails?.map((order) => (
-                            order.products.map((item, index) => (
-                              <tr key={index}>
-                                <td>{order.orderId}</td>
-                                <td>
-                                  <img
-                                    src={item.productId ? item.productId?.productImage : 'https://via.placeholder.com/50'}
-                                    alt={item.productId ? item.productId.productName : 'Product Image'}
-                                    width="50"
-                                    height="50"
-                                  />
-                                </td>
-                                <td>{item.quantity}</td>
-                                <td>${item.productId ? item.productId.finalPrice : '0.00'}</td>
-                                <td>{order.paymentStatus}</td>
-                                <td>{order.orderStatus}</td>
-                                <td>{DateFormatter(order.orderDate)}</td>
-                              </tr>
-                            ))
-                          ))
-                      )}
-                </tbody>
-              </table>
-            </div>
+           <div className="table-responsive">
+  {filteredOrders.length === 0 ? (
+    <div className="text-center py-5">
+      <img
+        src="/img/no-data.png"
+        alt="No data found"
+        className="img-fluid mb-3"
+        width={400}
+        height={300}
+        style={{ maxWidth: "100%", objectFit: "contain" }}
+      />
+      <h5 className="text-muted">No orders found</h5>
+    </div>
+  ) : (
+    <table className="table table-hover table-bordered align-middle text-center">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Product Image</th>
+          <th>Product Quantity</th>
+          <th>Amount</th>
+          <th>Payment Status</th>
+          <th>Order Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody className="bg-white">
+        {filteredOrders.map((order) =>
+          order.products.map((item, index) => (
+            <tr key={index}>
+              <td>{order.orderId}</td>
+              <td>
+                <img
+                  src={
+                    item.productId
+                      ? item.productId.productImage
+                      : 'https://via.placeholder.com/50'
+                  }
+                  alt={
+                    item.productId
+                      ? item.productId.productName
+                      : 'Product Image'
+                  }
+                  width="50"
+                  height="50"
+                />
+              </td>
+              <td>{item.quantity}</td>
+              <td>
+                ₹{item.productId ? item.productId.finalPrice : '0.00'}
+              </td>
+              <td>{order.paymentStatus}</td>
+              <td>{order.orderStatus}</td>
+              <td>{DateFormatter(order.orderDate)}</td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  )}
+</div>
+
 
 
             <nav aria-label="Page navigation">

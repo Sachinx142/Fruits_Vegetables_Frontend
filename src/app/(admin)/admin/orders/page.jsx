@@ -47,6 +47,7 @@ const page = () => {
               <th>Total (₹)</th>
               <th>Payment</th>
               <th>Order Status</th>
+              <th>Payment Status</th>
               <th className="text-center">Actions</th>
             </tr>
           </thead>
@@ -59,16 +60,17 @@ const page = () => {
                 <td>₹{order?.amount}</td>
                 <td>{order?.paymentMethod}</td>
                 <td>{order?.orderStatus}</td>
+                <td>{order?.paymentStatus}</td>
                 <td className="text-center">
                   <div className="d-flex justify-content-center gap-2">
                     <Link
-                      href={`/admin/orders/view/${order.id}`}
+                      href={{pathname:"/admin/orders/view",query:{id:order._id}}}
                       className="btn btn-sm btn-info"
                     >
                       <i className="bi bi-eye" />
                     </Link>
                     <Link
-                      href='/admin/orders/edit'
+                      href={{pathname:'/admin/orders/edit',query:{id:order._id}}}
                       className="btn-edit"
                     >
                       <i className="bi bi-pencil" />

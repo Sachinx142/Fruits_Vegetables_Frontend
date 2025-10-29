@@ -3,7 +3,7 @@ import DateFormatter from '@/_helper/frontend/DataFormatter'
 import api from '@/_utils/api'
 import Footer from '@/component/Footer'
 import Navbar from '@/component/Navbar'
-import { debounce} from 'lodash'
+import { debounce } from 'lodash'
 import { useSession } from 'next-auth/react'
 import React, { useCallback, useEffect, useState } from 'react'
 
@@ -106,67 +106,78 @@ const page = () => {
               </div>
             </div>
 
-           <div className="table-responsive">
-  {filteredOrders.length === 0 ? (
-    <div className="text-center py-5">
-      <img
-        src="/img/no-data.png"
-        alt="No data found"
-        className="img-fluid mb-3"
-        width={400}
-        height={300}
-        style={{ maxWidth: "100%", objectFit: "contain" }}
-      />
-      <h5 className="text-muted">No orders found</h5>
-    </div>
-  ) : (
-    <table className="table table-hover table-bordered align-middle text-center">
-      <thead>
-        <tr>
-          <th>Order ID</th>
-          <th>Product Image</th>
-          <th>Product Quantity</th>
-          <th>Amount</th>
-          <th>Payment Status</th>
-          <th>Order Status</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody className="bg-white">
-        {filteredOrders.map((order) =>
-          order.products.map((item, index) => (
-            <tr key={index}>
-              <td>{order.orderId}</td>
-              <td>
-                <img
-                  src={
-                    item.productId
-                      ? item.productId.productImage
-                      : 'https://via.placeholder.com/50'
-                  }
-                  alt={
-                    item.productId
-                      ? item.productId.productName
-                      : 'Product Image'
-                  }
-                  width="50"
-                  height="50"
-                />
-              </td>
-              <td>{item.quantity}</td>
-              <td>
-                ₹{item.productId ? item.productId.finalPrice : '0.00'}
-              </td>
-              <td>{order.paymentStatus}</td>
-              <td>{order.orderStatus}</td>
-              <td>{DateFormatter(order.orderDate)}</td>
-            </tr>
-          ))
-        )}
-      </tbody>
-    </table>
-  )}
-</div>
+            <div className="table-responsive">
+              {filteredOrders.length === 0 ? (
+                <div className="text-center py-5">
+                  <img
+                    src="/img/no-data.png"
+                    alt="No data found"
+                    className="img-fluid mb-3"
+                    width={400}
+                    height={300}
+                    style={{ maxWidth: "100%", objectFit: "contain" }}
+                  />
+                  <h5 className="text-muted">No orders found</h5>
+                </div>
+              ) : (
+                <table className="table table-hover table-bordered align-middle text-center">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Product Image</th>
+                      <th>Product Quantity</th>
+                      <th>Amount</th>
+                      <th>Payment Status</th>
+                      <th>Order Status</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white">
+                    {filteredOrders.map((order) =>
+                      order.products.map((item, index) => (
+                        <tr key={index}>
+                          <td>{order.orderId}</td>
+                          <td>
+                            <img
+                              src={
+                                item.productId
+                                  ? item.productId.productImage
+                                  : 'https://via.placeholder.com/50'
+                              }
+                              alt={
+                                item.productId
+                                  ? item.productId.productName
+                                  : 'Product Image'
+                              }
+                              width="50"
+                              height="50"
+                            />
+                          </td>
+                          <td>{item.quantity}</td>
+                          <td>
+                            ₹{item.productId ? (item.quantity * item.productId.finalPrice).toFixed(2) : '0.00'}
+                          </td>
+                          <td>
+                            <span className={
+                              `badge ${
+                                    order.paymentStatus === "Paid"
+                                     ? "bg-success"
+                                     : order.paymentStatus === "Pending"
+                                     ?  "bg-warning text-dark"
+                                     : "bg-danger"
+                                  }`}>
+                            {order.paymentStatus}
+                            </span>
+                          </td>
+                          <td>{order.orderStatus}</td>
+                          <td>{DateFormatter(order.orderDate)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              )}
+            </div>
 
 
 

@@ -37,6 +37,13 @@ const OrderViewPage = () => {
   if (loading) return <p className="text-center my-5">Loading order details...</p>;
   if (!order) return <p className="text-center text-danger my-5">Order not found</p>;
 
+  // Grand Total
+  const grandTotal = order.products?.reduce((sum,item)=>{
+    const price = item?.productId?.finalPrice || 0;
+    const qty = item?.quantity || 1;
+    return sum + price * qty;
+  },0)
+
   return (
     <div className="container my-5">
       {/* Header */}
@@ -48,32 +55,32 @@ const OrderViewPage = () => {
       {/* Order Info */}
       <div className="bg-white p-4 rounded shadow-sm mb-4">
         <div className="row">
-          <div className="col-md-6 mb-3">
-            <strong>Order Date:</strong>{" "}
-            {DateFormatter(order?.orderDate)}
+           <div className="col-md-6 mb-3">
+            <strong className="text-muted">Customer:</strong> 
+            <span className="fw-semibold text-dark">{order.userName}</span>
           </div>
           <div className="col-md-6 mb-3">
-            <strong>Status:</strong>{" "}
+            <strong className="text-muted">Email:</strong>
+            <span className="fw-semibold text-dark"> {order.email}</span>
+          </div>
+          <div className="col-md-6 mb-3">
+            <strong className="text-muted">Phone:</strong>
+            <span className="fw-semibold text-dark">{order.phone}</span>
+          </div>
+          <div className="col-md-6 mb-3">
+            <strong className="text-muted">Order Date:</strong>{" "}
+            <span className="fw-semibold text-dark">{DateFormatter(order?.orderDate)}</span>
+          </div>
+          <div className="col-md-6 mb-3">
+            <strong className="text-muted">Order Status:</strong>{" "}
             <span className="badge bg-info">{order.orderStatus}</span>
           </div>
-          <div className="col-md-6 mb-3">
-            <strong>Customer:</strong> {order.userName}
-          </div>
-          <div className="col-md-6 mb-3">
-            <strong>Email:</strong> {order.email}
-          </div>
-          <div className="col-md-6 mb-3">
-            <strong>Phone:</strong> {order.phone}
-          </div>
-          <div className="col-md-12 mb-3">
-            <strong>Shipping Address:</strong> {order.fullAddress}
-          </div>
-          <div className="col-md-6 mb-3">
-            <strong>Payment Method:</strong>{" "}
+            <div className="col-md-6 mb-3">
+            <strong className="text-muted">Payment Method:</strong>{" "}
             <span className="badge bg-secondary">{order.paymentMethod}</span>
           </div>
-          <div className="col-md-6 mb-3">
-            <strong>Payment Status:</strong>{" "}
+            <div className="col-md-6 mb-3">
+            <strong className="text-muted">Payment Status:</strong>{" "}
             <span
               className={`badge ${
                 order.paymentStatus === "Paid"
@@ -85,6 +92,10 @@ const OrderViewPage = () => {
             >
               {order.paymentStatus}
             </span>
+          </div>
+          <div className="col-md-6 mb-3">
+            <strong className="text-muted">Shipping Address:</strong> 
+            <span className="fw-semibold text-dark">{order.fullAddress}</span>
           </div>
         </div>
       </div>
@@ -99,12 +110,17 @@ const OrderViewPage = () => {
         <th>Image</th>
         <th>Product</th>
         <th>Price</th>
-        <th>Total</th>
+        <th>Qty</th>
+        <th>SubTotal</th>
       </tr>
     </thead>
     <tbody>
-      {order.products.map((item, idx) => (
-        <tr key={idx}>
+      {order.products.map((item, idx) => {
+         const price = item?.productId?.finalPrice || 0;
+         const qty = item?.quantity || 1;
+         const subtotal = price * qty;
+        return(
+            <tr key={idx}>
           <td>{idx + 1}</td>
           <td>
             <img
@@ -114,14 +130,15 @@ const OrderViewPage = () => {
             />
           </td>
           <td>{item.productId?.productName}</td>
-          <td>₹{item.productId?.finalPrice}</td>
-          {/* <td>₹{item.qty * item.productId?.finalPrice}</td> */}
-          <td>₹{item.productId?.finalPrice}</td>
+          <td>₹{price?.toFixed(2)}</td>
+          <td>₹{qty}</td>
+          <td>₹{subtotal?.toFixed(2)}</td>
         </tr>
-      ))}
+        )
+})}
       <tr>
         <td colSpan={5} className="text-end fw-bold">Grand Total:</td>
-        <td className="fw-bold text-success">₹{order.amount}</td>
+        <td className="fw-bold text-success">₹{grandTotal?.toFixed(2)}</td>
       </tr>
     </tbody>
   </table>

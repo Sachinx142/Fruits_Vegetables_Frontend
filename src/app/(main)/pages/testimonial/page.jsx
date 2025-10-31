@@ -1,8 +1,6 @@
 "use client";
 
 import api from "@/_utils/api";
-import Footer from "@/component/Footer";
-import Navbar from "@/component/Navbar";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -26,8 +24,6 @@ const Page = () => {
 
   return (
     <>
-      <Navbar />
-
       {/* Page Header Start */}
       <div className="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
         <div className="container">
@@ -105,8 +101,6 @@ const Page = () => {
         </div>
       </div>
       {/* Testimonial End */}
-
-      <Footer />
     </>
   );
 };

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react'
 
-const Navbar = () => {
+const Header = () => {
     const session = useSession();
     const router = useRouter();
     const pathname = usePathname()
@@ -105,4 +105,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+export default Header

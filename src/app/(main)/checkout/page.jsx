@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Navbar from "@/component/Navbar";
-import Footer from "@/component/Footer";
 import toast from 'react-hot-toast';
 import { useForm } from "react-hook-form";
 import api from "@/_utils/api";
@@ -165,18 +163,15 @@ useEffect(()=>{
 
   if (loading) return (
     <>
-      <Navbar />
       <div className="d-flex justify-content-center align-items-center" style={{ height: "70vh" }}>
         <h4>Loading...</h4>
       </div>
-      <Footer />
     </>
   );
 
 
   return (
     <>
-      <Navbar />
       <div className="container py-5 mt-5">
         <h1 className="mb-4">Checkout</h1>
         <div className="row">
@@ -296,7 +291,6 @@ useEffect(()=>{
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

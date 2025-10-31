@@ -6,8 +6,6 @@ import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import Footer from "@/component/Footer";
-import Navbar from "@/component/Navbar";
 import Link from "next/link";
 import api from "@/_utils/api";
 import "swiper/css";
@@ -140,7 +138,6 @@ export default function Home() {
 
   return (
     <>
-      <Navbar />
       {/* <!-- Carousel Start --> */}
       <div className="container-fluid p-0 mb-5">
         <Swiper
@@ -710,8 +707,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      <Footer />
     </>
   );
 }

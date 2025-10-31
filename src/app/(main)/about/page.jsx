@@ -1,12 +1,9 @@
 "use client"
-import Footer from '@/component/Footer'
-import Navbar from '@/component/Navbar'
 import React from 'react'
 
 const page = () => {
   return (
     <>
-    <Navbar/>
         {/* <!-- Page Header Start --> */}
     <div className="container-fluid page-header mb-5 wow fadeIn" data-wow-delay="0.1s">
         <div className="container">
@@ -99,8 +96,6 @@ const page = () => {
         </div>
     </div>
     {/* <!-- Feature End --> */}
-    <Footer/>
- 
     </>
   )
 }

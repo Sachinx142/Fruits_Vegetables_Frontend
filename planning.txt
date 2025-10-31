@@ -25,12 +25,14 @@ Random Id Generate
 
 cart :- The cart holds products either from the API (for logged-in users) or localStorage (for guests) and calculates subtotal, tax, shipping, and total. During checkout, the cart items, user info, and payment mode are sent to the backend to create an ord
 
-Stock Management -> Products to Purchase 
+Stock Management -> Products to Purchase (Pending)
+filter Product Based on Category (Pending)
 
 Thanku Page - Pending
 UI Fix - Pending
-Blog Details Page - Pendings
+Blog Details Page - Pending
 Dynamic Content Page - Pending
+Contact Us -> Pending 
 
 Admin
 Role-Based -> Pending

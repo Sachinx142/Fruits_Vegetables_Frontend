@@ -1,20 +1,15 @@
 'use client'
 import React, { useState } from 'react'
-import { usePathname } from 'next/navigation'
-import Header from '@/component/admin/AdminHeader'
-import Sidebar from '@/component/admin/AdminSidebar'
+import Header from '@/component/admin/Header'
+import Sidebar from '@/component/admin/Sidebar'
+import { ToastContainer } from "react-toastify";
 import PermissionProvider from '@/_context/PermissionContext'
 
 export default function AdminLayout({ children }) {
-  const pathname = usePathname()
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
 
   const OpenSidebar = () => setOpenSidebarToggle(!openSidebarToggle)
 
-  // ✅ Skip layout for login page
-  if (pathname === '/admin/admin-login') {
-    return <>{children}</>
-  }
 
   return (
     <>
@@ -49,6 +44,18 @@ export default function AdminLayout({ children }) {
               <main className="main-content">{children}</main>
             </div>
           </PermissionProvider>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </body>
       </html>
     </>

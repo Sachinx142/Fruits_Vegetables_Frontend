@@ -1,11 +1,9 @@
 import Footer from '@/component/Footer'
-import Navbar from '@/component/Navbar'
 import Link from 'next/link'
 import React from 'react'
 const NotFound = () => {
   return (
     <>
-    <Navbar/>
     <div className="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
         <div className="container">
             <h1 className="display-3 mb-3 animated slideInDown">404 Error</h1>
@@ -31,7 +29,6 @@ const NotFound = () => {
             </div>
         </div>
     </div>
-    <Footer/>
     </>
   )
 }

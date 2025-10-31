@@ -3,8 +3,6 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Camera } from "lucide-react";
-import Navbar from "@/component/Navbar";
-import Footer from "@/component/Footer";
 import api from "@/_utils/api";
 import toast from "react-hot-toast";
 import { formatDateForInput } from "@/_helper/frontend/dbFormatter";
@@ -105,7 +103,6 @@ export default function ProfileForm() {
 
   return (
     <>
-      <Navbar />
       <div className="container py-5 mt-5 margin-top-user">
         <div className="row justify-content-center">
           {/* LEFT SIDE: PROFILE CARD */}
@@ -319,7 +316,6 @@ export default function ProfileForm() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }

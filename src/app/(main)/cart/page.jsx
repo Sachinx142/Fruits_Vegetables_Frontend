@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Navbar from "@/component/Navbar";
-import Footer from "@/component/Footer";
 import api from "@/_utils/api";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -123,18 +121,15 @@ const CartPage = () => {
   if (loading) {
     return (
       <>
-        <Navbar />
         <div className="d-flex flex-column justify-content-center align-items-center"  style={{ height: "70vh" }} >
           <h4 className="text-center">Loading cart...</h4>
         </div>
-        <Footer />
       </>
     );
   }
 
   return (
     <>
-      <Navbar />
       <div className="container py-5 my-5">
         <h1 className="text-center fw-bold display-5 my-5 text-dark">
           🛒 Your Shopping Cart
@@ -244,7 +239,6 @@ const CartPage = () => {
             </div> : null}
         </div>
       </div>
-      <Footer />
     </>
   );
 };

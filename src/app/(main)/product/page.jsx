@@ -8,10 +8,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import Navbar from '@/component/Navbar';
-import Footer from '@/component/Footer';
-
-
 
 const page = () => {
   const [products, setProducts] = useState([]);
@@ -59,7 +55,6 @@ const page = () => {
 
   return (
     <>
-      <Navbar />
       <div className="container-fluid page-header mb-5 wow fadeIn" data-wow-delay="0.1s">
         <div className="container">
           <h1 className="display-3 mb-3 animated slideInDown">Products</h1>
@@ -236,18 +231,7 @@ const page = () => {
                   </div>
                 )}
 
-                {/* Browse More Button */}
-                <div
-                  className="col-12 text-center wow fadeInUp"
-                  data-wow-delay="0.1s"
-                >
-                  <Link
-                    className="btn btn-primary rounded-pill py-3 px-5"
-                    href=""
-                  >
-                    Browse More Products
-                  </Link>
-                </div>
+               
               </div>
             </div>
           </div>
@@ -326,9 +310,6 @@ const page = () => {
           )}
         </div>
       </div>
-
-      <Footer />
-
     </>
   )
 }

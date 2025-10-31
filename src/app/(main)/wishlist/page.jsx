@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import api from '@/_utils/api';
-import Navbar from '@/component/Navbar';
-import Footer from '@/component/Footer';
 
 const WishlistPage = () => {
     const session = useSession();
@@ -67,7 +65,6 @@ const WishlistPage = () => {
     if (loading) {
         return (
             <>
-                <Navbar />
                 <div
                     className="d-flex flex-column justify-content-center align-items-center"
                     style={{ height: "70vh" }}
@@ -75,7 +72,6 @@ const WishlistPage = () => {
                     <div className="spinner-border text-primary" role="status"></div>
                     <p className="text-muted mt-3">Loading your wishlist...</p>
                 </div>
-                <Footer />
             </>
         );
     }
@@ -83,7 +79,6 @@ const WishlistPage = () => {
 
     return (
         <>
-            <Navbar />
             <div className="text-center mb-5 padding-content-wishlist mt-5">
                 <h2 className="fw-bold text-primary">
                     <i className="fa fa-heart me-2"></i>My Wishlist
@@ -153,7 +148,6 @@ const WishlistPage = () => {
                     </a>
                 </div>
             )}
-            <Footer />
         </>
     );
 };

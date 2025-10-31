@@ -15,7 +15,7 @@ import {
   BsBoxArrowRight
 } from 'react-icons/bs'
 
-const AdminSidebar = ({ openSidebarToggle, OpenSidebar }) => {
+const Sidebar = ({ openSidebarToggle, OpenSidebar }) => {
   return (
     <aside id="sidebar" className={openSidebarToggle ? "sidebar-responsive" : ""}>
       <div className='sidebar-title'>
@@ -83,4 +83,4 @@ const AdminSidebar = ({ openSidebarToggle, OpenSidebar }) => {
   )
 }
 
-export default AdminSidebar
+export default Sidebar

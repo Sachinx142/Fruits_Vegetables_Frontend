@@ -1,8 +1,7 @@
 "use client";
 import api from "@/_utils/api";
 import Footer from "@/component/Footer";
-import Navbar from "@/component/Navbar";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import { toast } from "react-hot-toast";
@@ -91,18 +90,15 @@ function Page() {
   if (!productData) {
     return (
       <>
-        <Navbar />
         <div className="container my-5 text-center">
           <h4>Loading product details...</h4>
         </div>
-        <Footer />
       </>
     );
   }
 
   return (
     <>
-      <Navbar />
 
       <div className="container my-5 product-details">
         <div className="row g-4 align-items-start">
@@ -211,7 +207,6 @@ function Page() {
         </div>
       </div>
 
-      <Footer />
     </>
   );
 }

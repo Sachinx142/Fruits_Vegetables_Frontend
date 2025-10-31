@@ -2,8 +2,6 @@
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import api from '@/_utils/api';
-import Navbar from '@/component/Navbar';
-import Footer from '@/component/Footer';
 import { signIn, useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import OtpInput from 'react-otp-input';
@@ -111,7 +109,6 @@ export default function RegisterPage() {
 
   return (
     <>
-      <Navbar />
       <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
         <div className="card shadow-sm p-4" style={{ maxWidth: '450px', width: '100%' }}>
           <h3 className="text-center text-success mb-4">User Register</h3>
@@ -182,7 +179,6 @@ export default function RegisterPage() {
           )}
         </div>
       </div>
-      <Footer />
     </>
   );
 }

@@ -1,8 +1,6 @@
 "use client"
 import DateFormatter from '@/_helper/frontend/DataFormatter'
 import api from '@/_utils/api'
-import Footer from '@/component/Footer'
-import Navbar from '@/component/Navbar'
 import { debounce } from 'lodash'
 import { useSession } from 'next-auth/react'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -90,7 +88,6 @@ const page = () => {
 
   return (
     <>
-      <Navbar />
       <div className="container order-page-margin">
         <div className="card">
           <div className="card-header">
@@ -245,7 +242,6 @@ const page = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   )
 }

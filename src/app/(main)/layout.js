@@ -5,6 +5,8 @@ import { Toaster } from "react-hot-toast";
 import "bootstrap-icons/font/bootstrap-icons.css"
 import UserProvider from "@/_context/UserContext";
 import Script from "next/script";
+import Header from "@/component/Header"
+import Footer from "@/component/Footer"
 
 export default function RootLayout({ children }) {
   return (
@@ -39,7 +41,11 @@ export default function RootLayout({ children }) {
         {/* Spinner End */}
 
         <SessionProvider>
-          <UserProvider>{children}</UserProvider>
+          <UserProvider>
+            <Header/>
+            {children}
+            <Footer/>
+            </UserProvider>
         </SessionProvider>
 
         <Toaster

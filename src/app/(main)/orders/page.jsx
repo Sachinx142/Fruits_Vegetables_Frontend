@@ -73,6 +73,20 @@ const page = () => {
     handleSearch(searchTerm, ordersDetails, orderStatus);
   }, [searchTerm, orderStatus, ordersDetails])
 
+  // calculate all total Price
+  const computeOrderTotals = (order) => {
+    const subtotal = order.products.reduce((acc, p) => {
+      const price = Number(p.productId.finalPrice ?? p.productId?.actualPrice ?? 0);
+      const qty = Number(p.quantity ?? 0);
+      return acc + price * qty
+    }, 0);
+    const shipping = subtotal > 0 ? 50 : 0;
+    const gstRate = 0.18;
+    const gst = subtotal * gstRate;
+    const total = subtotal + gst + shipping;
+    return { subtotal, gst, shipping, total };
+  }
+
 
   return (
     <>
@@ -125,54 +139,86 @@ const page = () => {
                     <tr>
                       <th>Order ID</th>
                       <th>Product Image</th>
-                      <th>Product Quantity</th>
-                      <th>Amount</th>
+                      <th>Product Name</th>
+                      <th>Quantity</th>
+                      <th>Base Amount (₹)</th>
                       <th>Payment Status</th>
                       <th>Order Status</th>
                       <th>Date</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white">
-                    {filteredOrders.map((order) =>
-                      order.products.map((item, index) => (
-                        <tr key={index}>
-                          <td>{order.orderId}</td>
-                          <td>
-                            <img
-                              src={
-                                item.productId
-                                  ? item.productId.productImage
-                                  : 'https://via.placeholder.com/50'
-                              }
-                              alt={
-                                item.productId
-                                  ? item.productId.productName
-                                  : 'Product Image'
-                              }
-                              width="50"
-                              height="50"
-                            />
-                          </td>
-                          <td>{item.quantity}</td>
-                          <td>
-                            ₹{item.productId ? (item.quantity * item.productId.finalPrice).toFixed(2) : '0.00'}
-                          </td>
-                          <td>
-                            <span className={
-                              `badge ${
-                                    order.paymentStatus === "Paid"
-                                     ? "bg-success"
-                                     : order.paymentStatus === "Pending"
-                                     ?  "bg-warning text-dark"
-                                     : "bg-danger"
-                                  }`}>
-                            {order.paymentStatus}
-                            </span>
-                          </td>
-                          <td>{order.orderStatus}</td>
-                          <td>{DateFormatter(order.orderDate)}</td>
-                        </tr>
-                      ))
+                    {filteredOrders.map((order) => {
+                      const { subtotal, gst, shipping, total } = computeOrderTotals(order);
+                      return (
+                        <React.Fragment key={order._id || order.orderId}>
+                          {order.products?.map((item, index) => {
+                            const price = Number(item.productId?.finalPrice ?? item.productId?.actualPrice ?? 0);
+                            const lineTotal = price * Number(item.quantity ?? 0);
+                            return (
+                              <tr key={item._id || index}>
+                                <td>{order.orderId}</td>
+                                <td>{item?.productId?.productName || "N/A"}</td>
+                                <td>
+                                  <img
+                                    src={
+                                      item.productId
+                                        ? item.productId.productImage
+                                        : 'https://via.placeholder.com/50'
+                                    }
+                                    alt={
+                                      item.productId
+                                        ? item.productId.productName
+                                        : 'Product Image'
+                                    }
+                                    width="50"
+                                    height="50"
+                                  />
+                                </td>
+                                <td>{item.quantity}</td>
+                                <td>₹{lineTotal.toFixed(2)}</td>
+                                <td>
+                                  <span className={`badge ${order.paymentStatus === "Paid" ? "bg-success" : order.paymentStatus === "Pending" ? "bg-warning text-dark" : "bg-danger"}`}>
+                                    {order.paymentStatus}
+                                  </span>
+                                </td>
+                                <td>
+                                  <span className={`badge ${order.orderStatus === 'Delivered' ? 'bg-success' :
+                                      order.orderStatus === 'Shipped' ? 'bg-primary' :
+                                        order.orderStatus === 'Processing' ? 'bg-info text-dark' :
+                                          order.orderStatus === 'Cancelled' ? 'bg-danger' : 'bg-warning text-dark'
+                                    }`}>
+                                    {order.orderStatus}
+                                  </span>
+                                </td>
+                                <td>{DateFormatter(order.orderDate)}</td>
+                              </tr>
+                            )
+                          })}
+                          {/* totals row for this order (spans columns for clarity) */}
+                          <tr className="table-secondary">
+                            <td colSpan={4} className="text-end fw-semibold">Subtotal:</td>
+                            <td>₹{subtotal.toFixed(2)}</td>
+                            <td colSpan={3}></td>
+                          </tr>
+                          <tr className="table-secondary">
+                            <td colSpan={4} className="text-end fw-semibold">GST (18%):</td>
+                            <td>₹{gst.toFixed(2)}</td>
+                            <td colSpan={3}></td>
+                          </tr>
+                          <tr className="table-secondary">
+                            <td colSpan={4} className="text-end fw-semibold">Shipping:</td>
+                            <td>₹{shipping.toFixed(2)}</td>
+                            <td colSpan={3}></td>
+                          </tr>
+                          <tr className="table-light">
+                            <td colSpan={4} className="text-end fw-bold">Total:</td>
+                            <td className="fw-bold text-success">₹{total.toFixed(2)}</td>
+                            <td colSpan={3}></td>
+                          </tr>
+                        </React.Fragment>
+                      )
+                    }
                     )}
                   </tbody>
                 </table>

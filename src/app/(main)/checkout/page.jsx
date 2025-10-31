@@ -95,21 +95,26 @@ const [loading, setLoading] = useState(true);
         order_id: razorpayOrder.id,
         handler: async function (response) {
           // Save order in backend after successful payment
-          const saveRes = await api.post("/order/saveOrder", {
+          try {
+               const saveRes = await api.post("/order/saveOrder", {
             ...data,
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_order_id: response.razorpay_order_id,
             razorpay_signature: response.razorpay_signature,
-            paymentStatus: "Paid"
+            paymentStatus: "Paid",
+            orderStatus: "Processing",
           });
-
-          if (saveRes.data.status === 1) {
+           if (saveRes.data.status === 1) {
             toast.success(saveRes.data.message);
             localStorage.removeItem("cart");
             setCartItems([]);
           } else {
             toast.error(saveRes.data.message || "Failed to save order");
           }
+          } catch (error) {
+             console.error("Save order after success error:", err);
+          toast.error("Error saving order after payment!");
+          } 
         },
       modal: {
         ondismiss: async function () {
@@ -125,20 +130,30 @@ const [loading, setLoading] = useState(true);
       };
 
       const rzp = new window.Razorpay(options);
-        rzp.on("payment.failed", async function (response) {
-          toast.error("Payment failed. Order saved as Failed.");
-          await api.post("/order/saveOrder", {
-            ...data,
-            razorpay_order_id: response.error.metadata.order_id,
-            razorpay_payment_id: response.error.metadata.payment_id,
-            paymentStatus: "Failed",
-            orderStatus: "Cancelled",
-          });
+         rzp.on("payment.failed", async function (response) {
+      console.warn("❌ Payment failed:", response);
+      toast.error("Payment failed. Saving order as Failed...");
+
+      try {
+        await api.post("/order/saveOrder", {
+          ...data,
+          razorpay_order_id: response.error.metadata.order_id,
+          razorpay_payment_id: response.error.metadata.payment_id,
+          paymentStatus: "Failed",
+          orderStatus: "Cancelled",
         });
-      rzp.open();
+
+        toast.error("Order saved as Failed.");
+      } catch (error) {
+        console.error("❌ Failed to save failed order:", error);
+        toast.error("Unable to save failed order, please try again.");
+      }
+    });
+
+    rzp.open();
     }
   } catch (error) {
-    console.error(error);
+    console.error("Razorpay init error:",error);
     toast.error("Something went wrong. Please try again!");
   }
 };

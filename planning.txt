@@ -25,7 +25,7 @@ Random Id Generate
 
 cart :- The cart holds products either from the API (for logged-in users) or localStorage (for guests) and calculates subtotal, tax, shipping, and total. During checkout, the cart items, user info, and payment mode are sent to the backend to create an ord
 
-Problem :- Order save with shipping Details 70 of order with gst to calculate to 132 ruppes and save real in 132 in db(order Page) with calculation
+Stock Management -> Products to Purchase 
 
 Thanku Page - Pending
 UI Fix - Pending
